@@ -10,8 +10,8 @@ namespace LibraryManagementSystem.Models
     {
         public int ID {  get; set; }
 
-        public Book book { get; set; }
-        public Member member { get; set; }
+        public Book Book { get; set; }
+        public Member Member { get; set; }
         public DateTime BorrowDate { get; set; }
         public DateTime? ReturnDate { get; set; }
 

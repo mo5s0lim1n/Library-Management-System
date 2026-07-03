@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LibraryManagementSystem.DTO
 {
-    public struct strBookInfo
+    public struct BookInfoDto
     {
         public string Title;
         public string Author;

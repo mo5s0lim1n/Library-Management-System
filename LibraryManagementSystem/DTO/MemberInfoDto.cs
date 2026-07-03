@@ -10,7 +10,7 @@ namespace LibraryManagementSystem.DTO
         RegularMember,
         PremiumMember
     }
-    public struct strMember
+    public struct MemberInfoDto
     {
         public string Name;
         public string Email;
