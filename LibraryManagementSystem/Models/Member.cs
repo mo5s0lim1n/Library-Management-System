@@ -17,6 +17,13 @@ namespace LibraryManagementSystem.Models
         public DateTime JoinDate { get; set; }
         public Book[] BorrowedBooks { get; set; }
 
+        public Member(int Id,string Name,string Email) 
+        {
+            this.Id = Id;
+            this.Name = Name;
+            this.Email = Email;
+            this.JoinDate = DateTime.Now;
+        }
         public bool MatchesQuery(string query)
         {
             throw new NotImplementedException();

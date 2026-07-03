@@ -8,6 +8,10 @@ namespace LibraryManagementSystem.Models
 {
     public class PremiumMember : Member
     {
+        public PremiumMember(int Id, string Name, string Email) : base(Id, Name, Email)  
+        {
+
+        }
         public int MaxBorrowLimit { get; } = 10;
         public int LoanDays { get; } = 30;
 
