@@ -28,6 +28,9 @@ namespace LibraryManagementSystem.Models
         {
             throw new NotImplementedException();
         }
-
+        public virtual string GetInfo()
+        {
+            return $"Member Id {this.Id} Name {this.Name} Email {this.Email} join Date {this.JoinDate} ";
+        }
     }
 }
