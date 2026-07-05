@@ -125,6 +125,24 @@ namespace LibraryManagementSystem.Services
             _members[currentMemberIndex++]= CreateMember(lastMemberId++,ReadMemberInfo());
         }
 
+        public void PrintAvailableBooks()
+        {
+            int availableCount = 0;
+
+            foreach (var book in _books)
+            {
+                if (book.IsAvailable)
+                {
+                    Console.WriteLine(book.GetInfo());
+                    availableCount++;
+                }
+            }
+
+            if (availableCount == 0)
+            {
+                Console.WriteLine("No books available at the moment.");
+            }
+        }
 
     }
 }
