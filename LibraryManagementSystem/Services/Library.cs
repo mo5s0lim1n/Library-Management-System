@@ -20,6 +20,13 @@ namespace LibraryManagementSystem.Services
         private ushort currentBookIndex = 0;
         private ushort lastBookId = 0;
 
+        private BorrowRecord[] _borrowRecords = new BorrowRecord[100];
+        private ushort currentRecordIndex = 0;
+        private ushort lastBorrowProcessId = 0;
+
+
+
+        //
         private string ReadNotEmptyString(string fieldName)
         {
             string text;
@@ -75,6 +82,7 @@ namespace LibraryManagementSystem.Services
             _books[currentBookIndex++] = book;
         }
 
+        //
         private Member CreateMember(int id , MemberInfoDto MemberInfo)
         {
             
@@ -125,6 +133,7 @@ namespace LibraryManagementSystem.Services
             _members[currentMemberIndex++]= CreateMember(lastMemberId++,ReadMemberInfo());
         }
 
+        //
         public void PrintAvailableBooks()
         {
             int availableCount = 0;
@@ -143,6 +152,77 @@ namespace LibraryManagementSystem.Services
                 Console.WriteLine("No books available at the moment.");
             }
         }
+
+        //
+        private Member FindMemberById(int Id)
+        {
+            Member member = null;
+            foreach (var _member in _members)
+            {
+                if (_member.Id == Id)
+                {
+                    member = _member;
+                    break;
+                }
+            }
+            return member;
+        }
+        private Book FindBookById(int Id)
+        {
+            Book book = null;
+            foreach (var _book in _books)
+            {
+                if (_book.Id == Id)
+                {
+                    book = _book;
+                    break;
+                }
+            }
+            return book;
+        }
+        public void BorrowBook(int MemberId , int BookId)
+        {
+            if (currentRecordIndex >= _borrowRecords.Length)
+            {
+                Console.WriteLine("Borrow records storage is full.");
+                return;
+            }
+            Member member = FindMemberById(MemberId);
+            if (member == null) 
+            {
+                Console.WriteLine("Member not found");
+                return;
+            }
+
+            Book book = FindBookById(BookId);
+            if (book == null)
+            {
+                Console.WriteLine("Book not found");
+                return;
+            }
+
+            if (!book.IsAvailable)
+            {
+                Console.WriteLine("Book is not available");
+                return;
+            }
+
+            if (member.BorrowedBooksCount() >= member.MaxBorrowLimit)
+            {
+                Console.WriteLine("Member cannot borrow more books");
+                return;
+            }
+
+
+            if (!member.AddBorrowedBook(book))
+                return;
+
+            BorrowRecord borrowRecord = new BorrowRecord(lastBorrowProcessId,book,member);
+            book.IsAvailable = false;
+            _borrowRecords[currentRecordIndex++] = borrowRecord;
+            lastBorrowProcessId++;
+        }
+
 
     }
 }

@@ -15,9 +15,18 @@ namespace LibraryManagementSystem.Models
         public DateTime BorrowDate { get; set; }
         public DateTime? ReturnDate { get; set; }
 
+        public BorrowRecord(int id , Book book , Member member) 
+        {
+            this.ID = id;
+            this.Book = book;
+            this.Member = member;
+            this.BorrowDate = DateTime.Now;
+            this.ReturnDate = null;
+        }
         public bool IsLate()
         {
-            return false;
+            return ReturnDate == null &&
+                   DateTime.Now > BorrowDate.AddDays(Member.LoanDays);
         }
 
     }
