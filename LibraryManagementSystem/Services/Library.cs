@@ -185,6 +185,22 @@ namespace LibraryManagementSystem.Services
             
         }
 
+        // Return a book
+        public void ReturnBook(int BookId)
+        {
+            BorrowRecord borrowRecord = null;
+            for (int i = 0; i < currentRecordIndex; i++)
+            {
+                if(_borrowRecords[i].Book.Id == BookId && _borrowRecords[i].ReturnDate == null)
+                    borrowRecord = _borrowRecords[i];
+            }
+            if (borrowRecord == null)
+                throw new ArgumentException("No active borrow record found for this book.");
+                
 
+            borrowRecord.ReturnDate = DateTime.Now;
+            borrowRecord.Book.IsAvailable = true;
+            borrowRecord.Member.RemoveBorrowedBook(BookId);
+        }
     }
 }
