@@ -57,7 +57,7 @@ namespace LibraryManagementSystem.Services
         }
 
         // Add a member feature
-        private void ValidateBookInfo(MemberInfoDto MemberInfo)
+        private void ValidateMemberInfo(MemberInfoDto MemberInfo)
         {
 
             if (string.IsNullOrWhiteSpace(MemberInfo.Name))
@@ -69,7 +69,7 @@ namespace LibraryManagementSystem.Services
         }
         private Member CreateMember(int id , MemberInfoDto MemberInfo)
         {
-            ValidateBookInfo(MemberInfo);
+            ValidateMemberInfo(MemberInfo);
             if (MemberInfo.MemberType == enMemberType.PremiumMember)
             {
                 PremiumMember member = new PremiumMember(id, MemberInfo.Name, MemberInfo.Email);
