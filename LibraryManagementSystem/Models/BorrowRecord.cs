@@ -8,11 +8,11 @@ namespace LibraryManagementSystem.Models
 {
     public class BorrowRecord
     {
-        public int ID {  get; set; }
+        public int ID {  get;}
 
         public Book Book { get; set; }
         public Member Member { get; set; }
-        public DateTime BorrowDate { get; set; }
+        public DateTime BorrowDate { get; }
         public DateTime? ReturnDate { get; set; }
 
         public BorrowRecord(int id , Book book , Member member) 

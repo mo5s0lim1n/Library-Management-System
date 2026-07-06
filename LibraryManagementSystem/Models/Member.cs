@@ -14,7 +14,7 @@ namespace LibraryManagementSystem.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public DateTime JoinDate { get; set; }
+        public DateTime JoinDate { get; }
         private Book[] BorrowedBooks { get; }
 
         public virtual int LoanDays => 14;

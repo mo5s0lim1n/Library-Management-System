@@ -8,16 +8,17 @@ namespace LibraryManagementSystem.Models
 {
     public abstract class LibraryItem
     {
-        public int Id { get; set; }
+        public int Id { get; }
         public string Title { get; set;}
+        public DateTime AddedDate { get; }
 
         public LibraryItem(int Id,string Title) 
         {
             this.Id = Id;
             this.Title = Title;
+            this.AddedDate = DateTime.Now;
         }
 
-        public DateTime AddedDate { get; set; }
 
         public abstract string GetInfo();
 
