@@ -26,67 +26,51 @@ namespace LibraryManagementSystem.Services
 
 
 
-        //
-        private string ReadNotEmptyString(string fieldName)
+        // Add a book feature
+        private void ValidateBookInfo(BookInfoDto bookInfo)
         {
-            string text;
-            Console.Write($"Book {fieldName} : ");
-            text = Console.ReadLine().Trim();
-            while (string.IsNullOrWhiteSpace(text))
-            {
-                Console.WriteLine($"{fieldName} cannot be empty.");
-                Console.Write($"Book {fieldName} : ");
-                text = Console.ReadLine().Trim();
-            }
-            return text;
-        }
-        private int ReadValidBookYear()
-        {
-            int year;
-            while (true)
-            {
-                Console.Write("Book year : ");
-                if (int.TryParse(Console.ReadLine(), out year) 
-                && (year > 0 && year <= DateTime.Now.Year))
-                    break;
 
-                Console.WriteLine("Please enter a valid year.");
-            }
-            return year;
-        }
-        private BookInfoDto ReadBookInfo()
-        {
-            BookInfoDto bookInfo;
+            if (string.IsNullOrWhiteSpace(bookInfo.Title))
+                throw new ArgumentException("Book title cannot be empty.");
 
-            Console.WriteLine("-----------------------------");
-            Console.WriteLine("Book info : ");
-            bookInfo.Title = ReadNotEmptyString("Title");
-            bookInfo.Author = ReadNotEmptyString("Author");
-            
-            bookInfo.Year = ReadValidBookYear();
-            bookInfo.Genre = ReadNotEmptyString("Genre");  
-            Console.WriteLine("-----------------------------");
+            if (string.IsNullOrWhiteSpace(bookInfo.Author))
+                throw new ArgumentException("Book author cannot be empty.");
 
-            return bookInfo;
+            if (string.IsNullOrWhiteSpace(bookInfo.Genre))
+                throw new ArgumentException("Book genre cannot be empty.");
+
+            if (bookInfo.Year <= 0 || bookInfo.Year > DateTime.Now.Year)
+                throw new ArgumentException("Invalid book year.");
+
         }
-        public void AddBook() 
+        public void AddBook(BookInfoDto bookInfo) 
         {
             if (currentBookIndex >= _books.Length)
             {
-                Console.WriteLine("Library is full.");
-                return;
+                throw new InvalidOperationException("Library storage is full.");
             }
-            BookInfoDto bookInfo = ReadBookInfo();
+
+            ValidateBookInfo(bookInfo);
             int BookId = ++lastBookId;
             Book book = new Book(BookId,bookInfo.Title,bookInfo.Author,bookInfo.Year,bookInfo.Genre);
             _books[currentBookIndex++] = book;
         }
 
-        //
+        // Add a member feature
+        private void ValidateBookInfo(MemberInfoDto MemberInfo)
+        {
+
+            if (string.IsNullOrWhiteSpace(MemberInfo.Name))
+                throw new ArgumentException("Member Name cannot be empty.");
+
+            if (string.IsNullOrWhiteSpace(MemberInfo.Email))
+                throw new ArgumentException("Member Email cannot be empty.");
+
+        }
         private Member CreateMember(int id , MemberInfoDto MemberInfo)
         {
-            
-            if(MemberInfo.MemberType == enMemberType.PremiumMember)
+            ValidateBookInfo(MemberInfo);
+            if (MemberInfo.MemberType == enMemberType.PremiumMember)
             {
                 PremiumMember member = new PremiumMember(id, MemberInfo.Name, MemberInfo.Email);
                 return member;
@@ -97,84 +81,65 @@ namespace LibraryManagementSystem.Services
                 return member;
             }
         }
-        private MemberInfoDto ReadMemberInfo()
+        
+        public void MemberRegistration(MemberInfoDto MemberInfo)
         {
-            MemberInfoDto MemberInfo;
-            Console.WriteLine("-----------------------------");
-            Console.WriteLine("Member info : ");
-            MemberInfo.Name = ReadNotEmptyString("Name");
-            MemberInfo.Email = ReadNotEmptyString("Email");
-            int input;
-            while (true)
+            if (currentMemberIndex >= _members.Length)
             {
-                Console.Write("Member Type : ");
-                if (int.TryParse(Console.ReadLine(), out input)
-                && (input > 0 && input <= 2))
-                    break;
-
-                Console.WriteLine("Please enter a valid number .");
+                throw new InvalidOperationException("Member List is full.");
             }
-            if(input == 1) 
-                MemberInfo.MemberType = enMemberType.PremiumMember;
-            else 
-                MemberInfo.MemberType = enMemberType.RegularMember;
-
-            Console.WriteLine("-----------------------------");
-            return MemberInfo;
-
-        }
-        public void MemberRegistration()
-        {
-            if(currentMemberIndex >= _members.Length)
-            {
-                Console.WriteLine("Member List is full.");
-                return;
-            }
-            _members[currentMemberIndex++]= CreateMember(lastMemberId++,ReadMemberInfo());
+            
+            _members[currentMemberIndex++]= CreateMember(lastMemberId++, MemberInfo);
         }
 
-        //
-        public void PrintAvailableBooks()
+        // Get Available Books
+        public Book[] GetAvailableBooks()
         {
-            int availableCount = 0;
-
-            foreach (var book in _books)
+            int AvailableBooksCounter = 0;
+            for (int i = 0; i < currentBookIndex; i++)
             {
-                if (book.IsAvailable)
+                if (_books[i] != null && _books[i].IsAvailable)
                 {
-                    Console.WriteLine(book.GetInfo());
-                    availableCount++;
+                    AvailableBooksCounter++;
                 }
             }
 
-            if (availableCount == 0)
-            {
-                Console.WriteLine("No books available at the moment.");
+            Book[] AvailableBooks = new Book[AvailableBooksCounter];
+            int AvailableBooksindex = 0;
+            for (int i =0;i<currentBookIndex;i++) {
+
+                if (_books[i] != null && _books[i].IsAvailable)
+                {
+                    AvailableBooks[AvailableBooksindex++] = _books[i];
+                }
             }
+            return AvailableBooks;
         }
 
         //
         private Member FindMemberById(int Id)
         {
             Member member = null;
-            foreach (var _member in _members)
+
+            for (int i = 0; i < currentMemberIndex; i++) 
             {
-                if (_member.Id == Id)
+                if (_members[i].Id == Id)
                 {
-                    member = _member;
+                    member = _members[i];
                     break;
                 }
             }
+
             return member;
         }
         private Book FindBookById(int Id)
         {
             Book book = null;
-            foreach (var _book in _books)
+            for (int i = 0; i < currentBookIndex; i++)
             {
-                if (_book.Id == Id)
+                if (_books[i].Id == Id)
                 {
-                    book = _book;
+                    book = _books[i];
                     break;
                 }
             }
@@ -184,43 +149,40 @@ namespace LibraryManagementSystem.Services
         {
             if (currentRecordIndex >= _borrowRecords.Length)
             {
-                Console.WriteLine("Borrow records storage is full.");
-                return;
+                throw new InvalidOperationException("Borrow records storage is full.");
             }
+
             Member member = FindMemberById(MemberId);
-            if (member == null) 
+            if (member == null)
             {
-                Console.WriteLine("Member not found");
-                return;
+                throw new ArgumentException("Member not found.");
             }
 
             Book book = FindBookById(BookId);
             if (book == null)
             {
-                Console.WriteLine("Book not found");
-                return;
+                throw new ArgumentException("Book not found.");
             }
 
             if (!book.IsAvailable)
             {
-                Console.WriteLine("Book is not available");
-                return;
+                throw new ArgumentException("Book is not available.");
             }
 
             if (member.BorrowedBooksCount() >= member.MaxBorrowLimit)
             {
-                Console.WriteLine("Member cannot borrow more books");
-                return;
+                throw new InvalidOperationException("Member cannot borrow more books.");
             }
 
-
             if (!member.AddBorrowedBook(book))
-                return;
+            {
+                throw new InvalidOperationException("Failed to add the book to the member's borrowed books.");
+            }
 
-            BorrowRecord borrowRecord = new BorrowRecord(lastBorrowProcessId,book,member);
-            book.IsAvailable = false;
+            BorrowRecord borrowRecord = new BorrowRecord(lastBorrowProcessId++, book,member);
             _borrowRecords[currentRecordIndex++] = borrowRecord;
-            lastBorrowProcessId++;
+            book.IsAvailable = false;
+            
         }
 
 

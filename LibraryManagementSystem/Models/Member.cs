@@ -11,7 +11,7 @@ namespace LibraryManagementSystem.Models
     public class Member : ISearchable
     {
 
-        public int Id { get; set; }
+        public int Id { get; }
         public string Name { get; set; }
         public string Email { get; set; }
         public DateTime JoinDate { get; }
