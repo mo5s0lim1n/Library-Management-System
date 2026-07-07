@@ -202,5 +202,32 @@ namespace LibraryManagementSystem.Services
             borrowRecord.Book.IsAvailable = true;
             borrowRecord.Member.RemoveBorrowedBook(BookId);
         }
+
+        // Member Borrowing History
+        public BorrowRecord[] GetMemberHistory(int memberId) 
+        {
+            if(FindMemberById(memberId) == null)
+            {
+                throw new ArgumentException("Member not found.");
+            }
+
+            int recordCount = 0;
+            for (int i = 0; i < currentRecordIndex; i++)
+            {
+                if (_borrowRecords[i].Member.Id == memberId)
+                    recordCount++;
+            }
+
+            BorrowRecord[] memberHistory = new BorrowRecord[recordCount];
+            int memberHistoryIndex = 0;
+            for (int i = 0; i < currentRecordIndex; i++) 
+            {
+                if (_borrowRecords[i].Member.Id == memberId)
+                {
+                    memberHistory[memberHistoryIndex++] = _borrowRecords[i];
+                }
+            }
+            return memberHistory;
+        }
     }
 }
