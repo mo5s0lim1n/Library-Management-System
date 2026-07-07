@@ -8,7 +8,7 @@ namespace LibraryManagementSystem.Models
 {
     public class PremiumMember : Member
     {
-        public PremiumMember(int Id, string Name, string Email) : base(Id, Name, Email)  {}
+        public PremiumMember(int id, string name, string email) : base(id, name, email)  {}
 
         public override int LoanDays => 30;
         public override int MaxBorrowLimit => 15;

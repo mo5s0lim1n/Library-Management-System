@@ -12,10 +12,10 @@ namespace LibraryManagementSystem.Models
         public string Title { get; set;}
         public DateTime AddedDate { get; }
 
-        public LibraryItem(int Id,string Title) 
+        public LibraryItem(int id,string title) 
         {
-            this.Id = Id;
-            this.Title = Title;
+            this.Id = id;
+            this.Title = title;
             this.AddedDate = DateTime.Now;
         }
 

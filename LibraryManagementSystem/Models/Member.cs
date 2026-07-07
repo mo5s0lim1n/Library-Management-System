@@ -20,11 +20,11 @@ namespace LibraryManagementSystem.Models
         public virtual int LoanDays => 14;
         public virtual int MaxBorrowLimit => 7;
 
-        public Member(int Id,string Name,string Email) 
+        public Member(int id,string name,string email) 
         {
-            this.Id = Id;
-            this.Name = Name;
-            this.Email = Email;
+            this.Id = id;
+            this.Name = name;
+            this.Email = email;
             this.JoinDate = DateTime.Now;
             BorrowedBooks = new Book[this.MaxBorrowLimit];
         }

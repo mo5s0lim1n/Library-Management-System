@@ -57,39 +57,39 @@ namespace LibraryManagementSystem.Services
         }
 
         // Add a member feature
-        private void ValidateMemberInfo(MemberInfoDto MemberInfo)
+        private void ValidateMemberInfo(MemberInfoDto memberInfo)
         {
 
-            if (string.IsNullOrWhiteSpace(MemberInfo.Name))
+            if (string.IsNullOrWhiteSpace(memberInfo.Name))
                 throw new ArgumentException("Member Name cannot be empty.");
 
-            if (string.IsNullOrWhiteSpace(MemberInfo.Email))
+            if (string.IsNullOrWhiteSpace(memberInfo.Email))
                 throw new ArgumentException("Member Email cannot be empty.");
 
         }
-        private Member CreateMember(int id , MemberInfoDto MemberInfo)
+        private Member CreateMember(int id , MemberInfoDto memberInfo)
         {
-            ValidateMemberInfo(MemberInfo);
-            if (MemberInfo.MemberType == enMemberType.PremiumMember)
+            ValidateMemberInfo(memberInfo);
+            if (memberInfo.MemberType == enMemberType.PremiumMember)
             {
-                PremiumMember member = new PremiumMember(id, MemberInfo.Name, MemberInfo.Email);
+                PremiumMember member = new PremiumMember(id, memberInfo.Name, memberInfo.Email);
                 return member;
             }
             else
             {
-                Member member = new Member(id, MemberInfo.Name, MemberInfo.Email);
+                Member member = new Member(id, memberInfo.Name, memberInfo.Email);
                 return member;
             }
         }
         
-        public void MemberRegistration(MemberInfoDto MemberInfo)
+        public void MemberRegistration(MemberInfoDto memberInfo)
         {
             if (currentMemberIndex >= _members.Length)
             {
                 throw new InvalidOperationException("Member List is full.");
             }
             
-            _members[currentMemberIndex++]= CreateMember(lastMemberId++, MemberInfo);
+            _members[currentMemberIndex++]= CreateMember(lastMemberId++, memberInfo);
         }
 
         // Get Available Books
@@ -117,13 +117,13 @@ namespace LibraryManagementSystem.Services
         }
 
         //
-        private Member FindMemberById(int Id)
+        private Member FindMemberById(int id)
         {
             Member member = null;
 
             for (int i = 0; i < currentMemberIndex; i++) 
             {
-                if (_members[i].Id == Id)
+                if (_members[i].Id == id)
                 {
                     member = _members[i];
                     break;
@@ -132,12 +132,12 @@ namespace LibraryManagementSystem.Services
 
             return member;
         }
-        private Book FindBookById(int Id)
+        private Book FindBookById(int id)
         {
             Book book = null;
             for (int i = 0; i < currentBookIndex; i++)
             {
-                if (_books[i].Id == Id)
+                if (_books[i].Id == id)
                 {
                     book = _books[i];
                     break;
@@ -145,20 +145,20 @@ namespace LibraryManagementSystem.Services
             }
             return book;
         }
-        public void BorrowBook(int MemberId , int BookId)
+        public void BorrowBook(int memberId , int bookId)
         {
             if (currentRecordIndex >= _borrowRecords.Length)
             {
                 throw new InvalidOperationException("Borrow records storage is full.");
             }
 
-            Member member = FindMemberById(MemberId);
+            Member member = FindMemberById(memberId);
             if (member == null)
             {
                 throw new ArgumentException("Member not found.");
             }
 
-            Book book = FindBookById(BookId);
+            Book book = FindBookById(bookId);
             if (book == null)
             {
                 throw new ArgumentException("Book not found.");
@@ -186,12 +186,12 @@ namespace LibraryManagementSystem.Services
         }
 
         // Return a book
-        public void ReturnBook(int BookId)
+        public void ReturnBook(int bookId)
         {
             BorrowRecord borrowRecord = null;
             for (int i = 0; i < currentRecordIndex; i++)
             {
-                if(_borrowRecords[i].Book.Id == BookId && _borrowRecords[i].ReturnDate == null)
+                if(_borrowRecords[i].Book.Id == bookId && _borrowRecords[i].ReturnDate == null)
                     borrowRecord = _borrowRecords[i];
             }
             if (borrowRecord == null)
@@ -200,7 +200,7 @@ namespace LibraryManagementSystem.Services
 
             borrowRecord.ReturnDate = DateTime.Now;
             borrowRecord.Book.IsAvailable = true;
-            borrowRecord.Member.RemoveBorrowedBook(BookId);
+            borrowRecord.Member.RemoveBorrowedBook(bookId);
         }
 
         // Member Borrowing History
