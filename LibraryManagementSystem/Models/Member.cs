@@ -30,7 +30,7 @@ namespace LibraryManagementSystem.Models
         }
         public bool MatchesQuery(string query)
         {
-            throw new NotImplementedException();
+            return (query.ToLower() == this.Name.ToLower());
         }
         public virtual string GetInfo()
         {

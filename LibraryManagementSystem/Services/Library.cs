@@ -1,4 +1,5 @@
 ﻿using LibraryManagementSystem.DTO;
+using LibraryManagementSystem.Interfaces;
 using LibraryManagementSystem.Models;
 using System;
 using System.Collections.Generic;
@@ -229,5 +230,30 @@ namespace LibraryManagementSystem.Services
             }
             return memberHistory;
         }
+
+        //Search the Catalog
+        public ISearchable[] SearchCatalog(string query)
+        {
+            ISearchable[] tempResults = new ISearchable[currentMemberIndex + currentBookIndex];
+            int resultCounter = 0;
+            for (int i = 0; i < currentMemberIndex; i++) 
+            {
+                if (_members[i].MatchesQuery(query))
+                    tempResults[resultCounter++] = _members[i];
+            }
+            for (int i = 0; i < currentBookIndex; i++)
+            {
+                if (_books[i].MatchesQuery(query))
+                    tempResults[resultCounter++] = _books[i];
+            }
+
+            ISearchable[] searchResults = new ISearchable[resultCounter];
+            for (int i = 0; i < resultCounter; i++)
+            {
+                searchResults[i] = tempResults[i];
+            }
+
+            return searchResults;
+        } 
     }
 }
