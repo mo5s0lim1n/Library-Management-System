@@ -1,6 +1,7 @@
 ﻿using LibraryManagementSystem.DTO;
 using LibraryManagementSystem.Interfaces;
 using LibraryManagementSystem.Models;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -117,7 +118,7 @@ namespace LibraryManagementSystem.Services
             return AvailableBooks;
         }
 
-        //
+        // Borrow A Book
         private Member FindMemberById(int id)
         {
             Member member = null;
@@ -254,6 +255,52 @@ namespace LibraryManagementSystem.Services
             }
 
             return searchResults;
-        } 
+        }
+
+        // Late Return Report
+        private bool IsLate(BorrowRecord record)
+        {
+            //if (record == null)
+            //    throw new ArgumentNullException(nameof(record));
+            if (record.ReturnDate != null)
+                return false;
+            DateTime dueDate = record.BorrowDate.AddDays(record.Member.LoanDays);
+
+            return DateTime.Now > dueDate;
+
+        }
+        public BorrowRecord[] GetOverdueBorrowRecords()
+        {
+            BorrowRecord[] TempOverdueRecords = new BorrowRecord[currentRecordIndex];
+            int OverdueRecordsCounter = 0;
+            for (int i = 0; i < currentRecordIndex; i++)
+            {
+                if (_borrowRecords[i] != null &&  _borrowRecords[i].ReturnDate == null)
+                {
+                    if (IsLate(_borrowRecords[i]))
+                    {
+                        TempOverdueRecords[OverdueRecordsCounter++] = _borrowRecords[i];
+                    }
+                        
+                }
+            }
+            BorrowRecord[] OverdueRecords = new BorrowRecord[OverdueRecordsCounter];
+            for(int i = 0; i < OverdueRecordsCounter; i++)
+            {
+                OverdueRecords[i] = TempOverdueRecords[i];
+            }
+
+            return OverdueRecords;
+        }
+
+        public int GetOverdueDays(BorrowRecord record)
+        {
+            if (!IsLate(record))
+                return 0;
+
+            DateTime dueDate = record.BorrowDate.AddDays(record.Member.LoanDays);
+
+            return (DateTime.Now - dueDate).Days;
+        }
     }
 }
