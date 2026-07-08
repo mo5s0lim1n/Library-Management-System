@@ -91,7 +91,7 @@ namespace LibraryManagementSystem.Services
                 throw new InvalidOperationException("Member List is full.");
             }
             
-            _members[currentMemberIndex++]= CreateMember(lastMemberId++, memberInfo);
+            _members[currentMemberIndex++]= CreateMember(++lastMemberId, memberInfo);
         }
 
         // Get Available Books
@@ -181,7 +181,7 @@ namespace LibraryManagementSystem.Services
                 throw new InvalidOperationException("Failed to add the book to the member's borrowed books.");
             }
 
-            BorrowRecord borrowRecord = new BorrowRecord(lastBorrowProcessId++, book,member);
+            BorrowRecord borrowRecord = new BorrowRecord(++lastBorrowProcessId, book,member);
             _borrowRecords[currentRecordIndex++] = borrowRecord;
             book.IsAvailable = false;
             
