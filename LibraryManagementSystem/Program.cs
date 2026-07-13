@@ -1,5 +1,4 @@
-﻿using LibraryManagementSystem.DTO;
-using LibraryManagementSystem.Interfaces;
+﻿using LibraryManagementSystem.Interfaces;
 using LibraryManagementSystem.Models;
 using LibraryManagementSystem.Services;
 using System.Net;
@@ -9,6 +8,7 @@ namespace LibraryManagementSystem
 {
     internal class Program
     {
+       
         public enum enUserChoice
         {
             AddBook = 1,
@@ -106,10 +106,14 @@ namespace LibraryManagementSystem
         static public void RegisterMember(Library library)
         {
             PrintHeader("Add Member");
+            string name;
+            string email;
+            int memberType;
             try
             {
-                library.MemberRegistration(ReadMemberInfo());
-                PrintSuccess("Member Added Successul");
+                ReadMemberInfo(out name , out email , out memberType);
+                library.MemberRegistration(name,email,memberType);
+                PrintSuccess("Member Added Successful");
             }
             catch (Exception ex)
             {
@@ -130,6 +134,7 @@ namespace LibraryManagementSystem
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                Pause();
             }
 
 
@@ -146,6 +151,7 @@ namespace LibraryManagementSystem
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                Pause();
             }
 
         }
@@ -160,7 +166,7 @@ namespace LibraryManagementSystem
             if(result.Length == 0)
             {
                 Console.WriteLine("there is no Matches Query");
-                Console.ReadKey();
+                Pause();
                 return;
             }
             foreach (var item in result)
@@ -184,7 +190,7 @@ namespace LibraryManagementSystem
             if(books.Length == 0)
             {
                 Console.WriteLine("there is no Available Books .");
-                Console.ReadKey();
+                Pause();
                 return;
             }
             foreach (var book in books)
@@ -207,11 +213,11 @@ namespace LibraryManagementSystem
             foreach (var record in records)
             {
                 Console.WriteLine("Book : ");
-                Console.Write($"{record.Book.Title} {record.BorrowDate} ");
+                Console.Write($"Title : {record.Book.Title}\tBorrowDate : {record.BorrowDate} ");
                 if (record.ReturnDate == null)
-                    Console.Write($"Return status Not return");
+                    Console.Write($"\tReturn status : not return");
                 else
-                    Console.Write($"Return status returned ");
+                    Console.Write($"\tReturn status : returned ");
             }
             Pause();
         }
@@ -308,12 +314,12 @@ namespace LibraryManagementSystem
             genre = ReadNotEmptyString("Book","Genre");
             Console.WriteLine("___________________________________________");
         }
-        static public MemberInfoDto ReadMemberInfo()
+        static public void ReadMemberInfo(out string name , out string email ,out int membertype)
         {
-            MemberInfoDto MemberInfo;
+           
             Console.WriteLine("Member info");
-            MemberInfo.Name =ReadNotEmptyString("Member","Name");
-            MemberInfo.Email = ReadNotEmptyString("Member", "Email");
+            name =ReadNotEmptyString("Member","Name");
+            email = ReadNotEmptyString("Member", "Email");
             int input;
             while (true)
             {
@@ -324,14 +330,9 @@ namespace LibraryManagementSystem
 
                 Console.WriteLine("Please enter a valid number .");
             }
-            if (input == 1)
-                MemberInfo.MemberType = enMemberType.RegularMember;
-            else
-                MemberInfo.MemberType = enMemberType.PremiumMember;
+            membertype = input;
 
             Console.WriteLine("___________________________________________");
-            return MemberInfo;
-
         }
         
 

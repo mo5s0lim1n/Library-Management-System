@@ -1,5 +1,4 @@
-﻿using LibraryManagementSystem.DTO;
-using LibraryManagementSystem.Interfaces;
+﻿using LibraryManagementSystem.Interfaces;
 using LibraryManagementSystem.Models;
 using Microsoft.VisualBasic;
 using System;
@@ -8,10 +7,16 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static LibraryManagementSystem.Program;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace LibraryManagementSystem.Services
 {
+    public enum enMemberType
+    {
+        RegularMember,
+        PremiumMember
+    }
     public class Library
     {
         private Member[] _members = new Member[100];
@@ -59,39 +64,38 @@ namespace LibraryManagementSystem.Services
         }
 
         // Add a member feature
-        private void ValidateMemberInfo(MemberInfoDto memberInfo)
+        private void ValidateMemberInfo(string name, string email)
         {
 
-            if (string.IsNullOrWhiteSpace(memberInfo.Name))
+            if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Member Name cannot be empty.");
 
-            if (string.IsNullOrWhiteSpace(memberInfo.Email))
+            if (string.IsNullOrWhiteSpace(email))
                 throw new ArgumentException("Member Email cannot be empty.");
 
         }
-        private Member CreateMember(int id , MemberInfoDto memberInfo)
+        private Member CreateMember(int id , string name , string email , int memberType)
         {
-            ValidateMemberInfo(memberInfo);
-            if (memberInfo.MemberType == enMemberType.PremiumMember)
+            ValidateMemberInfo(name,email);
+            if (memberType == 1)
             {
-                PremiumMember member = new PremiumMember(id, memberInfo.Name, memberInfo.Email);
+                PremiumMember member = new PremiumMember(id, name, email);
                 return member;
             }
             else
             {
-                Member member = new Member(id, memberInfo.Name, memberInfo.Email);
+                Member member = new Member(id, name, email);
                 return member;
             }
         }
-        
-        public void MemberRegistration(MemberInfoDto memberInfo)
+        public void MemberRegistration(string name, string email, int memberType)
         {
             if (currentMemberIndex >= _members.Length)
             {
                 throw new InvalidOperationException("Member List is full.");
             }
             
-            _members[currentMemberIndex++]= CreateMember(++lastMemberId, memberInfo);
+            _members[currentMemberIndex++]= CreateMember(++lastMemberId, name,email,memberType);
         }
 
         // Get Available Books
