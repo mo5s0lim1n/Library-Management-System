@@ -30,7 +30,7 @@ namespace LibraryManagementSystem.Models
         }
         public bool MatchesQuery(string query)
         {
-            return (query.ToLower() == this.Name.ToLower());
+            return this.Name.ToLower().Contains(query.ToLower());
         }
         public virtual string GetInfo()
         {

@@ -28,7 +28,7 @@ namespace LibraryManagementSystem.Models
 
         public bool MatchesQuery(string query)
         {
-            return query.ToLower() == this.Title.ToLower();
+            return this.Title.ToLower().Contains(query.ToLower());
         }
     }
 }
