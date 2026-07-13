@@ -29,32 +29,32 @@ namespace LibraryManagementSystem.Services
 
 
         // Add a book feature
-        private void ValidateBookInfo(BookInfoDto bookInfo)
+        private void ValidateBookInfo(string title, string author, int year, string genre)
         {
 
-            if (string.IsNullOrWhiteSpace(bookInfo.Title))
+            if (string.IsNullOrWhiteSpace(title))
                 throw new ArgumentException("Book title cannot be empty.");
 
-            if (string.IsNullOrWhiteSpace(bookInfo.Author))
+            if (string.IsNullOrWhiteSpace(author))
                 throw new ArgumentException("Book author cannot be empty.");
 
-            if (string.IsNullOrWhiteSpace(bookInfo.Genre))
+            if (string.IsNullOrWhiteSpace(genre))
                 throw new ArgumentException("Book genre cannot be empty.");
 
-            if (bookInfo.Year <= 0 || bookInfo.Year > DateTime.Now.Year)
+            if (year <= 0 || year > DateTime.Now.Year)
                 throw new ArgumentException("Invalid book year.");
 
         }
-        public void AddBook(BookInfoDto bookInfo) 
+        public void AddBook(string title, string author, int year, string genre) 
         {
             if (currentBookIndex >= _books.Length)
             {
                 throw new InvalidOperationException("Library storage is full.");
             }
 
-            ValidateBookInfo(bookInfo);
+            ValidateBookInfo(title, author, year, genre);
             int BookId = ++lastBookId;
-            Book book = new Book(BookId,bookInfo.Title,bookInfo.Author,bookInfo.Year,bookInfo.Genre);
+            Book book = new Book(BookId, title, author, year, genre);
             _books[currentBookIndex++] = book;
         }
 

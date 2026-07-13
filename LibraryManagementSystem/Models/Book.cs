@@ -23,7 +23,7 @@ namespace LibraryManagementSystem.Models
         }
         public override string GetInfo()
         {
-            return $"\n\tBook Info:\n\tid {base.Id}\n\tTitle {base.Title}\n\tAuthor {Author}\n\tYear {Year}\n\tGenre {Genre}";
+            return $"\nBook Info:\n\tid = {base.Id}\n\tTitle : {base.Title}\n\tAuthor : {Author}\n\tYear :{Year}\n\tGenre : {Genre}";
         }
 
         public bool MatchesQuery(string query)

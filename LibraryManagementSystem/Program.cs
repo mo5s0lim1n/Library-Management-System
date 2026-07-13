@@ -88,10 +88,15 @@ namespace LibraryManagementSystem
         static public void AddABook(Library library)
         {
             PrintHeader("Add Book");
+            string title;
+            string author;
+            string genre;
+            int year;
             try
             {
-                library.AddBook(ReadBookInfo());
-                PrintSuccess("Book Added Successul");
+                ReadBookInfo(out title, out author, out year, out genre);
+                library.AddBook(title,  author, year, genre);
+                PrintSuccess("Book Added Successful");
             }
             catch (Exception ex)
             {
@@ -293,21 +298,16 @@ namespace LibraryManagementSystem
             }
             return text;
         }
-        static public BookInfoDto ReadBookInfo()
+        static public void ReadBookInfo(out string title, out string author, out int year, out string genre)
         {
-            BookInfoDto bookInfo;
-
             Console.WriteLine("Book Info");
-            bookInfo.Title = ReadNotEmptyString("Book","Title");
-            bookInfo.Author = ReadNotEmptyString("Book","Author");
+            title = ReadNotEmptyString("Book","Title");
+            author = ReadNotEmptyString("Book","Author");
 
-            bookInfo.Year = ReadValidBookYear();
-            bookInfo.Genre = ReadNotEmptyString("Book","Genre");
+            year = ReadValidBookYear();
+            genre = ReadNotEmptyString("Book","Genre");
             Console.WriteLine("___________________________________________");
-
-            return bookInfo;
         }
-
         static public MemberInfoDto ReadMemberInfo()
         {
             MemberInfoDto MemberInfo;
