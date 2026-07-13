@@ -14,7 +14,7 @@ namespace LibraryManagementSystem.Models
         public override int MaxBorrowLimit => 15;
         public override string GetInfo()
         {
-            return $"{base.GetInfo()}, Max Borrow: {MaxBorrowLimit}, Loan Days: {LoanDays}";
+            return $"{base.GetInfo()}\n\tMax Borrow: {MaxBorrowLimit}\n\tLoan Days: {LoanDays}";
         }
     }
 }

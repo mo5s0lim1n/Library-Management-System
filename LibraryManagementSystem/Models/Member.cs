@@ -15,7 +15,7 @@ namespace LibraryManagementSystem.Models
         public string Name { get; set; }
         public string Email { get; set; }
         public DateTime JoinDate { get; }
-        private Book[] BorrowedBooks { get; }
+        private Book[] _BorrowedBooks ;
 
         public virtual int LoanDays => 14;
         public virtual int MaxBorrowLimit => 7;
@@ -26,7 +26,7 @@ namespace LibraryManagementSystem.Models
             this.Name = name;
             this.Email = email;
             this.JoinDate = DateTime.Now;
-            BorrowedBooks = new Book[this.MaxBorrowLimit];
+            _BorrowedBooks = new Book[this.MaxBorrowLimit];
         }
         public bool MatchesQuery(string query)
         {
@@ -34,14 +34,14 @@ namespace LibraryManagementSystem.Models
         }
         public virtual string GetInfo()
         {
-            return $"Member Id {this.Id} Name {this.Name} Email {this.Email} join Date {this.JoinDate} ";
+            return $"\n\tMember Info:\n\tMember Id {this.Id}\n\tName {this.Name}\n\tEmail {this.Email}\n\tjoin Date {this.JoinDate}";
         }
 
         public int BorrowedBooksCount()
         {
             int count = 0;
 
-            foreach (Book book in BorrowedBooks)
+            foreach (Book book in _BorrowedBooks)
             {
                 if (book != null)
                     count++;
@@ -51,11 +51,12 @@ namespace LibraryManagementSystem.Models
         }
         public bool AddBorrowedBook(Book book)
         {
-            for (int i = 0; i < BorrowedBooks.Length; i++)
+            // what if array full ? ---> handle in Library.cs
+            for (int i = 0; i < _BorrowedBooks.Length; i++)
             {
-                if (BorrowedBooks[i] == null)
+                if (_BorrowedBooks[i] == null)
                 {
-                    BorrowedBooks[i] = book;
+                    _BorrowedBooks[i] = book;
                     return true;
                 }
             }
@@ -64,12 +65,12 @@ namespace LibraryManagementSystem.Models
         }
         public bool RemoveBorrowedBook(int bookId)
         {
-            for (int i = 0; i < BorrowedBooks.Length; i++)
+            for (int i = 0; i < _BorrowedBooks.Length; i++)
             {
-                if (BorrowedBooks[i] != null &&
-                    BorrowedBooks[i].Id == bookId)
+                if (_BorrowedBooks[i] != null &&
+                    _BorrowedBooks[i].Id == bookId)
                 {
-                    BorrowedBooks[i] = null;
+                    _BorrowedBooks[i] = null;
                     return true;
                 }
             }
