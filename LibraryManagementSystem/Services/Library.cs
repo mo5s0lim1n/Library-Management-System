@@ -31,6 +31,21 @@ namespace LibraryManagementSystem.Services
         private ushort currentRecordIndex = 0;
         private ushort lastBorrowProcessId = 0;
 
+        public void SeedTestData()
+        {
+            _members[currentMemberIndex++] = new Member(++lastMemberId, "John Doe", "john.doe@email.com");
+            _members[currentMemberIndex++] = new Member(++lastMemberId, "Jane Smith", "jane.smith@email.com");
+            _members[currentMemberIndex++] = new Member(++lastMemberId, "Michael Brown", "michael.brown@email.com");
+            _members[currentMemberIndex++] = new Member(++lastMemberId, "Emily Davis", "emily.davis@email.com");
+            _members[currentMemberIndex++] = new Member(++lastMemberId, "David Wilson", "david.wilson@email.com");
+
+            _books[currentBookIndex++] = new Book(++lastBookId, "The Great Gatsby", "F. Scott Fitzgerald", 1925, "Fiction");
+            _books[currentBookIndex++] = new Book(++lastBookId, "To Kill a Mockingbird", "Harper Lee", 1960, "Classic");
+            _books[currentBookIndex++] = new Book(++lastBookId, "1984", "George Orwell", 1949, "Dystopian");
+            _books[currentBookIndex++] = new Book(++lastBookId, "The Hobbit", "J.R.R. Tolkien", 1937, "Fantasy");
+            _books[currentBookIndex++] = new Book(++lastBookId, "C# in Depth", "Jon Skeet", 2019, "Educational");
+        
+        }
 
 
         // Add a book feature

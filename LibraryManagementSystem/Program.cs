@@ -339,6 +339,7 @@ namespace LibraryManagementSystem
         static void Main(string[] args)
         {
             Library library = new Library();
+            library.SeedTestData();
             while (true)
             {
                 Console.Clear();
